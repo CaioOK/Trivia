@@ -1,5 +1,6 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
+import getToken from '../Services/fetchApi';
 
 class Login extends React.Component {
   constructor(_props) {
@@ -7,7 +8,7 @@ class Login extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.validateFields = this.validateFields.bind(this);
-    // this.handleClick = this.handleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
       name: '',
@@ -33,15 +34,29 @@ class Login extends React.Component {
     return (emailTest && nameTest);
   }
 
-  // handleClick() {
-  //   const { name, email } = this.state;
-  // }
+  handleClick() {
+    // const { name, email } = this.state;
+    getToken();
+    this.setState({
+      loggedIn: true,
+    });
+  }
 
   render() {
     const { name, gravatarEmail, loggedIn } = this.state;
     const isDisabled = !this.validateFields(name, gravatarEmail);
     return (
+
       <div>
+        <Link to="/settings">
+          <button
+            type="button"
+            data-testid="btn-settings"
+          >
+
+            Menu
+          </button>
+        </Link>
         <label htmlFor="name">
           Nome:
           <input
@@ -66,12 +81,11 @@ class Login extends React.Component {
           <button
             type="submit"
             data-testid="btn-play"
-            // onClick={ this.handleClick }
+            onClick={ this.handleClick }
             disabled={ isDisabled }
           >
             Jogar
           </button>
-
         )}
       </div>
     );
