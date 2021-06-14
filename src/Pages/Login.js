@@ -1,5 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { addInfo } from '../actions';
+import { getToken } from '../Services/fetchApi';
 
 class Login extends React.Component {
   constructor(_props) {
@@ -7,7 +11,7 @@ class Login extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.validateFields = this.validateFields.bind(this);
-    // this.handleClick = this.handleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
       name: '',
@@ -33,9 +37,15 @@ class Login extends React.Component {
     return (emailTest && nameTest);
   }
 
-  // handleClick() {
-  //   const { name, email } = this.state;
-  // }
+  handleClick() {
+    const { name, gravatarEmail } = this.state;
+    const { clickLogin } = this.props;
+    clickLogin({ gravatarEmail, name });
+    getToken();
+    this.setState({
+      loggedIn: true,
+    });
+  }
 
   render() {
     const { name, gravatarEmail, loggedIn } = this.state;
@@ -76,7 +86,7 @@ class Login extends React.Component {
           <button
             type="submit"
             data-testid="btn-play"
-            // onClick={ this.handleClick }
+            onClick={ this.handleClick }
             disabled={ isDisabled }
           >
             Jogar
@@ -87,4 +97,13 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  clickLogin: (info) => dispatch(addInfo(info)),
+});
+
+Login.propTypes = {
+  clickLogin: PropTypes.func,
+
+}.isRequired;
+
+export default connect(null, mapDispatchToProps)(Login);
