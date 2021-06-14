@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import getToken from '../Services/fetchApi';
 
 class Login extends React.Component {
@@ -46,7 +46,17 @@ class Login extends React.Component {
     const { name, gravatarEmail, loggedIn } = this.state;
     const isDisabled = !this.validateFields(name, gravatarEmail);
     return (
+
       <div>
+        <Link to="/settings">
+          <button
+            type="button"
+            data-testid="btn-settings"
+          >
+
+            Menu
+          </button>
+        </Link>
         <label htmlFor="name">
           Nome:
           <input
@@ -76,7 +86,6 @@ class Login extends React.Component {
           >
             Jogar
           </button>
-
         )}
       </div>
     );
