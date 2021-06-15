@@ -7,10 +7,6 @@ export const getQuestionsAC = (payload) => ({
   payload,
 });
 
-// export const fetchQuestionsAC = (dispatch) => (
-//   fetchQuestions().then((questions) => dispatch(getQuestionsAC(questions)))
-// );
-
 export function fetchQuestionsAC() {
   const token = localStorage.getItem('token');
   const questionsUrl = `https://opentdb.com/api.php?amount=5&token=${token}`;

@@ -5,15 +5,33 @@ import Question from '../components/Question';
 import { fetchQuestionsAC } from '../actions';
 
 class Game extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      loading: true,
+    };
+  }
+
   componentDidMount() {
     const { getQuestionsFromAPI } = this.props;
-    getQuestionsFromAPI();
+    getQuestionsFromAPI()
+      .then(() => {
+        this.setState({
+          loading: false,
+        });
+      });
   }
 
   render() {
+    const { questionsFromStore } = this.props;
+    const { loading } = this.state;
+
     return (
       <div>
-        <Question />
+        {loading
+          ? 'Carregando...'
+          : <Question currentQuestion={ questionsFromStore[0] } />}
       </div>
     );
   }
@@ -23,8 +41,13 @@ const mapDispatchToProps = (dispatch) => ({
   getQuestionsFromAPI: () => dispatch(fetchQuestionsAC()),
 });
 
+const mapStateToProps = (state) => ({
+  questionsFromStore: state.questionsReducer.questions.results,
+});
+
 Game.propTypes = {
   getQuestionsFromAPI: PropTypes.func,
+  questionsFromStore: PropTypes.arrayOf(PropTypes.object),
 }.isRequired;
 
-export default connect(null, mapDispatchToProps)(Game);
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
