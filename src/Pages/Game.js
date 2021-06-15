@@ -16,12 +16,15 @@ class Game extends Component {
 
   componentDidMount() {
     const { getQuestionsFromAPI } = this.props;
-    getQuestionsFromAPI()
-      .then(() => {
-        this.setState({
-          loading: false,
+    const time = 1500;
+    setTimeout(() => {
+      getQuestionsFromAPI()
+        .then(() => {
+          this.setState({
+            loading: false,
+          });
         });
-      });
+    }, time);
   }
 
   render() {
