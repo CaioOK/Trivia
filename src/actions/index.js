@@ -1,5 +1,4 @@
-// import { fetchQuestions } from '../Services/fetchApi';
-
+export const LOGIN = 'LOGIN';
 export const GET_QUESTIONS = 'GET_QUESTIONS';
 
 export const getQuestionsAC = (payload) => ({
@@ -16,3 +15,8 @@ export function fetchQuestionsAC() {
         .then((questions) => dispatch(getQuestionsAC(questions))))
   );
 }
+
+export const addInfo = (payload) => ({
+  type: LOGIN,
+  payload,
+});

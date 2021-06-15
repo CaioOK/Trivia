@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Question from '../components/Question';
 import { fetchQuestionsAC } from '../actions';
+import Header from '../components/Header';
 
 class Game extends Component {
   constructor() {
@@ -29,6 +30,7 @@ class Game extends Component {
 
     return (
       <div>
+        <Header />
         {loading
           ? 'Carregando...'
           : <Question currentQuestion={ questionsFromStore[0] } />}

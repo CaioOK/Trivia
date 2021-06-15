@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
-import getToken from '../Services/fetchApi';
+import PropTypes from 'prop-types';
+import { addInfo } from '../actions';
+import { getToken } from '../Services/fetchApi';
 
 class Login extends React.Component {
   constructor(_props) {
@@ -35,7 +38,9 @@ class Login extends React.Component {
   }
 
   handleClick() {
-    // const { name, email } = this.state;
+    const { name, gravatarEmail } = this.state;
+    const { clickLogin } = this.props;
+    clickLogin({ gravatarEmail, name });
     getToken();
     this.setState({
       loggedIn: true,
@@ -92,4 +97,13 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  clickLogin: (info) => dispatch(addInfo(info)),
+});
+
+Login.propTypes = {
+  clickLogin: PropTypes.func,
+
+}.isRequired;
+
+export default connect(null, mapDispatchToProps)(Login);
