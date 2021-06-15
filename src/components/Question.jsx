@@ -51,7 +51,7 @@ class Question extends React.Component {
                   type="radio"
                   name="multiple"
                   value={ answer }
-                  data_testid="correct-answer"
+                  data-testid="correct-answer"
                 />
                 {answer}
               </label>
@@ -69,7 +69,7 @@ class Question extends React.Component {
                 type="radio"
                 name="multiple"
                 value={ answer }
-                data_testid={ `wrong-answer-${wrongID - 1}` }
+                data-testid={ `wrong-answer-${wrongID - 1}` }
               />
               {answer}
             </label>
