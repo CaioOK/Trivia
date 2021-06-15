@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as api from '../Services/fetchApi';
 
 class Header extends Component {
@@ -44,5 +45,11 @@ const mapStateToProps = (state) => ({
   email: state.loginReducer.email,
   name: state.loginReducer.name,
 });
+
+Header.propTypes = {
+  email: PropTypes.string,
+  name: PropTypes.string,
+
+}.isRequired;
 
 export default connect(mapStateToProps, null)(Header);
