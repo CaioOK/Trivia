@@ -28,14 +28,14 @@ class Header extends Component {
 
   render() {
     const { imgUrl } = this.state;
-    const { name } = this.props;
+    const { name, scoreRedux } = this.props;
     return (
       <div>
         <header>
           <img src={ imgUrl } alt="foto-perfil" data-testid="header-profile-picture" />
           <span data-testid="header-player-name">{ name }</span>
         </header>
-        <p data-testid="header-score">0</p>
+        <p data-testid="header-score">{scoreRedux}</p>
       </div>
     );
   }
@@ -44,6 +44,7 @@ class Header extends Component {
 const mapStateToProps = (state) => ({
   email: state.loginReducer.email,
   name: state.loginReducer.name,
+  scoreRedux: state.answerReducer.answer,
 });
 
 Header.propTypes = {

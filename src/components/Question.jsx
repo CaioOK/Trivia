@@ -1,7 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Timer from './Timer';
+import { addAnswer } from '../actions/index';
 
 class Question extends React.Component {
+  constructor() {
+    super();
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
   trueOfFalse(parametro) {
     let testId1 = `wrong-answer-${0}`;
     let testId2 = `wrong-answer-${0}`;
@@ -52,6 +61,7 @@ class Question extends React.Component {
                   name="multiple"
                   value={ answer }
                   data-testid="correct-answer"
+                  onChange={ this.handleClick }
                 />
                 {answer}
               </label>
@@ -70,6 +80,8 @@ class Question extends React.Component {
                 name="multiple"
                 value={ answer }
                 data-testid={ `wrong-answer-${wrongID - 1}` }
+                onChange={ this.handleClick }
+                // disabled={  }
               />
               {answer}
             </label>
@@ -78,6 +90,17 @@ class Question extends React.Component {
       </>
 
     );
+  }
+
+  handleClick(flag, event) {
+    const { assertions, currentQuestion: { correct_answer: correctAnswer } } = this.props;
+    if (flag === undefined) {
+      if (correctAnswer === event.target.value) {
+        assertions(1);
+      }
+    } else {
+      console.log('errou');
+    }
   }
 
   render() {
@@ -89,7 +112,6 @@ class Question extends React.Component {
     const meio = 0.5;
     const currentAnswer = answers.sort(() => Math.random() - meio);
     const correctId = currentAnswer.indexOf(correctAnswer);
-    console.log(currentQuestion);
 
     return (
       <section style={ { display: 'flex', flexDirection: 'column' } }>
@@ -99,6 +121,7 @@ class Question extends React.Component {
           {type === 'boolean'
             ? this.trueOfFalse(correctAnswer) : this.multiple(currentAnswer, correctId)}
         </div>
+        <Timer answerQuestion={ this.handleClick } />
       </section>
     );
   }
@@ -108,4 +131,7 @@ Question.propTypes = {
   currentQuestion: PropTypes.objectOf(PropTypes.string, PropTypes.array),
 }.isRequired;
 
-export default Question;
+const mapDispatchToProps = (dispatch) => ({
+  assertions: (answer) => dispatch(addAnswer(answer)),
+});
+export default connect(null, mapDispatchToProps)(Question);

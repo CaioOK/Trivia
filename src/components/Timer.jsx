@@ -1,45 +1,27 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class Timer extends Component {
-  constructor() {
-    super();
-    this.state = {
-      time: 30,
-    };
-    // this.handleTime = this.handleTime.bind(this);
-  }
+const Timer = ({ answerQuestion }) => {
+  const timerNumber = 30;
+  const timeoutCountdown = 1000;
 
-  //   componentDidUpdate() {
-  //     const SEG = 1000;
-  //     setTimeout(() => {
-  //       this.handleTime();
-  //     }, SEG);
-  //   }
+  const [timer, setTimer] = useState(timerNumber);
 
-  //   handleTime() {
+  const usingSetTimer = () => setTimer((previousState) => previousState - 1);
+  const timer1 = () => setTimeout(() => usingSetTimer(), timeoutCountdown);
+  const timerId = timer1();
 
-  //   }
-  componentDidMount() {
-    const num = 1000;
-    while (this.state.time > 0) {
-      setInterval(() => {
-        this.setState((previousState) => ({
-          time: previousState.time - 1,
-        }));
-      }, num);
-    }
-  }
+  const timerZerado = () => {
+    answerQuestion(true);
+    clearTimeout(timerId);
+  };
 
-  render() {
-    const { time } = this.state;
-    console.log(time);
-    return (
-      <div>
-        00:
-        {time}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <p>
+        {timer > 0 ? `${timer} segundos` : timerZerado() }
+      </p>
+    </div>
+  );
+};
 
 export default Timer;
