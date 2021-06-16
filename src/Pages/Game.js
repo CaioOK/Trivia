@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Question from '../components/Question';
 import { fetchQuestionsAC } from '../actions';
 import Header from '../components/Header';
+import Timer from '../components/Timer';
 
 class Game extends Component {
   constructor() {
@@ -34,6 +35,7 @@ class Game extends Component {
     return (
       <div>
         <Header />
+        <Timer />
         {loading
           ? 'Carregando...'
           : <Question currentQuestion={ questionsFromStore[0] } />}
