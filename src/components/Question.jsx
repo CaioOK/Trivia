@@ -22,7 +22,7 @@ class Question extends React.Component {
   }
 
   componentDidMount() {
-    const time = 900;
+    const time = 800;
     setTimeout(() => this.handleQuestions(), time);
   }
 
