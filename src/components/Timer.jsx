@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const Timer = ({ answerQuestion }) => {
   const timerNumber = 30;
@@ -6,13 +7,12 @@ const Timer = ({ answerQuestion }) => {
 
   const [timer, setTimer] = useState(timerNumber);
 
-  const usingSetTimer = () => setTimer((previousState) => previousState - 1);
-  const timer1 = () => setTimeout(() => usingSetTimer(), timeoutCountdown);
+  const timer1 = () => setTimeout(() => setTimer(timer - 1), timeoutCountdown);
   const timerId = timer1();
 
   const timerZerado = () => {
-    answerQuestion(true);
     clearTimeout(timerId);
+    answerQuestion(true);
   };
 
   return (
@@ -23,5 +23,9 @@ const Timer = ({ answerQuestion }) => {
     </div>
   );
 };
+
+Timer.propTypes = {
+  answerQuestion: PropTypes.func,
+}.isRequired;
 
 export default Timer;
