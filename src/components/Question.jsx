@@ -14,7 +14,9 @@ class Question extends React.Component {
     this.stylesMultiple = this.stylesMultiple.bind(this);
     this.stylesTrueFalse = this.stylesTrueFalse.bind(this);
     this.handleQuestions = this.handleQuestions.bind(this);
-
+    this.handleDifficulty = this.handleDifficulty.bind(this);
+    this.saveTimer = this.saveTimer.bind(this);
+    this.stateTimer = 0;
     this.state = {
       colorRed: { border: '3px solid rgb(255, 0, 0)' },
       colorGreen: { border: '3px solid rgb(6, 240, 15)' },
@@ -30,6 +32,10 @@ class Question extends React.Component {
   componentDidMount() {
     const time = 900;
     setTimeout(() => this.handleQuestions(), time);
+  }
+
+  saveTimer(timer) {
+    this.stateTimer = timer;
   }
 
   handleQuestions() {
@@ -83,7 +89,9 @@ class Question extends React.Component {
           type="button"
           name="question"
           value="True"
-          onClick={ this.stylesTrueFalse }
+          onClick={ (event) => {
+            this.stylesTrueFalse(); this.handleClick(undefined, event);
+          } }
           data-testid={ testId1 }
           style={ trueBoolean }
         />
@@ -92,7 +100,10 @@ class Question extends React.Component {
           type="button"
           name="question"
           value="False"
-          onClick={ this.stylesTrueFalse }
+          onClick={ (event) => {
+            this.stylesTrueFalse();
+            this.handleClick(undefined, event);
+          } }
           data-testid={ testId2 }
           style={ falseBoolean }
         />
@@ -113,7 +124,10 @@ class Question extends React.Component {
                 type="button"
                 name="multiple"
                 value={ answer }
-                onClick={ this.stylesMultiple }
+                onClick={ (event) => {
+                  this.stylesMultiple();
+                  this.handleClick(undefined, event);
+                } }
                 style={ styleCorrect }
                 key={ index }
                 data-testid="correct-answer"
@@ -127,7 +141,9 @@ class Question extends React.Component {
               type="button"
               name="multiple"
               value={ answer }
-              onClick={ this.stylesMultiple }
+              onClick={ (event) => {
+                this.stylesMultiple(); this.handleClick(undefined, event);
+              } }
               key={ index }
               style={ styleIncorrect }
               data-testid={ `wrong-answer-${wrongID - 1}` }
@@ -139,12 +155,36 @@ class Question extends React.Component {
     );
   }
 
+  handleDifficulty(difficulty) {
+    let questionDif = 0;
+    switch (difficulty) {
+    case 'easy':
+      questionDif = 1;
+      break;
+    case 'medium':
+      questionDif = 2;
+      break;
+    case 'hard':
+      questionDif = 2 + 1;
+      break;
+    default:
+      return questionDif;
+    }
+    return questionDif;
+  }
+
   handleClick(flag, event) {
-    const { assertions, currentQuestion: { correct_answer: correctAnswer } } = this.props;
-    // const { parentElement: { innerText: value } } = event.target;
+    const ten = 10;
+    const { assertions, currentQuestion: { correct_answer: correctAnswer, difficulty },
+    } = this.props;
     if (flag === undefined) {
       if (correctAnswer === event.target.value) {
         assertions(1);
+        const score = ten + (this.stateTimer * this.handleDifficulty(difficulty));
+        console.log(score);
+        const localStorageState = JSON.parse(localStorage.getItem('state'));
+        localStorageState.player.score += score;
+        localStorage.setItem('state', JSON.stringify(localStorageState));
       }
     } else {
       console.log('errou');
@@ -167,7 +207,7 @@ class Question extends React.Component {
           {type === 'boolean'
             ? this.trueOfFalse('True') : this.multiple(currentAnswers, correctId)}
         </div>
-        <Timer answerQuestion={ this.handleClick } />
+        <Timer answerQuestion={ this.handleClick } saveTimer={ this.saveTimer } />
       </section>
     );
   }

@@ -1,6 +1,7 @@
 export const LOGIN = 'LOGIN';
 export const GET_QUESTIONS = 'GET_QUESTIONS';
 export const ADD_ANSWER = 'ADD_ANSWER';
+export const UPDATE_TIMER = 'UPDATE_TIMER';
 
 export const getQuestionsAC = (payload) => ({
   type: GET_QUESTIONS,
@@ -25,4 +26,8 @@ export const addInfo = (payload) => ({
 export const addAnswer = (payload) => ({
   type: ADD_ANSWER,
   payload,
+});
+
+export const addTimer = () => ({
+  type: UPDATE_TIMER,
 });
