@@ -1,10 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Timer from './Timer';
+import { addAnswer } from '../actions/index';
+
+const correctAnswerString = 'correct-answer';
 
 class Question extends React.Component {
   constructor() {
     super();
 
+    this.handleClick = this.handleClick.bind(this);
     this.stylesMultiple = this.stylesMultiple.bind(this);
     this.stylesTrueFalse = this.stylesTrueFalse.bind(this);
     this.handleQuestions = this.handleQuestions.bind(this);
@@ -50,7 +56,7 @@ class Question extends React.Component {
   stylesTrueFalse() {
     const answerArray = document.querySelectorAll('input');
     const getAnswer = answerArray[0].getAttribute('data-testid');
-    if (getAnswer === 'correct-answer') {
+    if (getAnswer === correctAnswerString) {
       this.setState((previousState) => ({
         trueBoolean: previousState.colorGreen,
         falseBoolean: previousState.colorRed,
@@ -68,32 +74,28 @@ class Question extends React.Component {
     let testId1 = `wrong-answer-${0}`;
     let testId2 = `wrong-answer-${0}`;
     if (parametro === 'True') {
-      testId1 = 'correct-anwser';
-    } else testId2 = 'correct-anwser';
+      testId1 = correctAnswerString;
+    } else testId2 = correctAnswerString;
     return (
       <>
-        <label htmlFor="verdadeiro" style={ trueBoolean } data-testid={ testId1 }>
-          <input
-            id="verdadeiro"
-            type="button"
-            name="question"
-            value="0"
-            onClick={ this.stylesTrueFalse }
-            data-testid={ testId1 }
-          />
-          Verdadeiro
-        </label>
-        <label htmlFor="falso" style={ falseBoolean } data-testid={ testId2 }>
-          <input
-            id="falso"
-            type="button"
-            name="question"
-            value="1"
-            onClick={ this.stylesTrueFalse }
-            data-testid={ testId2 }
-          />
-          Falso
-        </label>
+        <input
+          id="verdadeiro"
+          type="button"
+          name="question"
+          value="True"
+          onClick={ this.stylesTrueFalse }
+          data-testid={ testId1 }
+          style={ trueBoolean }
+        />
+        <input
+          id="falso"
+          type="button"
+          name="question"
+          value="False"
+          onClick={ this.stylesTrueFalse }
+          data-testid={ testId2 }
+          style={ falseBoolean }
+        />
       </>
     );
   }
@@ -106,47 +108,49 @@ class Question extends React.Component {
         {answers.map((answer, index) => {
           if (index === correctId) {
             return (
-              <label
-                htmlFor={ `question${index}` }
-                key={ index }
-                style={ styleCorrect }
-                data-testid="correct-answer"
-              >
-                <input
-                  id={ `question${index}` }
-                  type="button"
-                  name="multiple"
-                  value={ index }
-                  onClick={ this.stylesMultiple }
-                  style={ styleCorrect }
-                />
-                {answer}
-              </label>
-            );
-          }
-          wrongID += 1;
-          return (
-            <label
-              htmlFor={ `question${index}` }
-              key={ index }
-              style={ styleIncorrect }
-              data-testid={ `wrong-answer-${wrongID - 1}` }
-            >
               <input
                 id={ `question${index}` }
                 type="button"
                 name="multiple"
-                value={ index }
+                value={ answer }
                 onClick={ this.stylesMultiple }
-                style={ styleIncorrect }
+                style={ styleCorrect }
+                key={ index }
+                data-testid="correct-answer"
               />
-              {answer}
-            </label>
+            );
+          }
+          wrongID += 1;
+          return (
+            <input
+              id={ `question${index}` }
+              type="button"
+              name="multiple"
+              value={ answer }
+              onClick={ this.stylesMultiple }
+              key={ index }
+              style={ styleIncorrect }
+              data-testid={ `wrong-answer-${wrongID - 1}` }
+            />
           );
         })}
       </>
 
     );
+  }
+
+  handleClick(flag, event) {
+    const { assertions, currentQuestion: { correct_answer: correctAnswer } } = this.props;
+    // const { parentElement: { innerText: value } } = event.target;
+    if (flag === undefined) {
+      if (correctAnswer === event.target.value) {
+        assertions(1);
+      }
+    } else {
+      console.log('errou');
+      const btns = document.querySelectorAll('input');
+      btns.forEach((btn) => { btn.disabled = true; });
+    }
   }
 
   render() {
@@ -163,6 +167,7 @@ class Question extends React.Component {
           {type === 'boolean'
             ? this.trueOfFalse('True') : this.multiple(currentAnswers, correctId)}
         </div>
+        <Timer answerQuestion={ this.handleClick } />
       </section>
     );
   }
@@ -172,4 +177,7 @@ Question.propTypes = {
   currentQuestion: PropTypes.objectOf(PropTypes.string, PropTypes.array),
 }.isRequired;
 
-export default Question;
+const mapDispatchToProps = (dispatch) => ({
+  assertions: (answer) => dispatch(addAnswer(answer)),
+});
+export default connect(null, mapDispatchToProps)(Question);
