@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 
 class Feedback extends Component {
@@ -20,12 +21,24 @@ class Feedback extends Component {
 
   render() {
     const message = this.handleFeedbackMessage();
+    const stateLS = JSON.parse(localStorage.getItem('state'));
+    const { assertions, score } = stateLS.player;
     return (
       <>
         <Header />
+        <h3 data-testid="feedback-total-score">{score}</h3>
+        <h3 data-testid="feedback-total-question">{assertions}</h3>
         <div data-testid="feedback-text">
           {message}
         </div>
+        <Link to="/">
+          <button
+            type="button"
+            data-testid="btn-play-again"
+          >
+            Jogar novamente
+          </button>
+        </Link>
       </>
     );
   }
