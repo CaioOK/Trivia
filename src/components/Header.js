@@ -17,7 +17,7 @@ class Header extends Component {
     const state = { player: {
       name,
       assertions: 0,
-      score: 0,
+      score: 10,
       gravatarEmail: email,
     } };
     if (!localStorage.getItem('state')) {
@@ -27,15 +27,18 @@ class Header extends Component {
   }
 
   render() {
+    const stateLS = JSON.parse(localStorage.getItem('state'));
+    if (!stateLS) return <div>Carregando...</div>;
     const { imgUrl } = this.state;
-    const { name, scoreRedux } = this.props;
+    const { name } = this.props;
+    const { score } = stateLS.player;
     return (
       <div>
         <header>
           <img src={ imgUrl } alt="foto-perfil" data-testid="header-profile-picture" />
           <span data-testid="header-player-name">{ name }</span>
         </header>
-        <p data-testid="header-score">{scoreRedux}</p>
+        <p data-testid="header-score">{score}</p>
       </div>
     );
   }

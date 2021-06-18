@@ -1,31 +1,72 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-const Timer = ({ answerQuestion }) => {
-  const timerNumber = 30;
-  const timeoutCountdown = 1000;
+class Timer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      totalTime: 30,
+      currentTime: 30,
+    };
 
-  const [timer, setTimer] = useState(timerNumber);
+    this.counterCreator = this.counterCreator.bind(this);
+    this.handleNewTimer = this.handleNewTimer.bind(this);
+  }
 
-  const timer1 = () => setTimeout(() => setTimer(timer - 1), timeoutCountdown);
-  const timerId = timer1();
+  componentDidMount() {
+    this.counterCreator();
+  }
 
-  const timerZerado = () => {
-    clearTimeout(timerId);
-    answerQuestion(true);
-  };
+  componentDidUpdate() {
+    this.handleNewTimer();
+  }
 
-  return (
-    <div>
-      <p>
-        {timer > 0 ? `${timer} segundos` : timerZerado() }
-      </p>
-    </div>
-  );
-};
+  counterCreator() {
+    const { totalTime } = this.state;
+    const oneSecond = 1000;
+    let currentTimeLocal = totalTime;
+
+    const myTimer = setInterval(() => {
+      const { stopTimer, disableBtns, getTime } = this.props;
+      if (stopTimer || currentTimeLocal === 0) {
+        console.log('Parou!', currentTimeLocal);
+        disableBtns();
+        clearInterval(myTimer);
+        return;
+      }
+      currentTimeLocal -= 1;
+      this.setState({ currentTime: currentTimeLocal });
+      getTime(currentTimeLocal);
+    }, oneSecond);
+  }
+
+  handleNewTimer() {
+    const { makeOneTimerOnly, startNewTimer, enableBtns } = this.props;
+
+    if (startNewTimer) {
+      this.counterCreator();
+      makeOneTimerOnly();
+      enableBtns();
+    }
+  }
+
+  render() {
+    const { currentTime } = this.state;
+
+    return (
+      <div>
+        <p>
+          { currentTime }
+        </p>
+      </div>
+    );
+  }
+}
 
 Timer.propTypes = {
-  answerQuestion: PropTypes.func,
+  startNewTimer: PropTypes.bool,
+  enableBtns: PropTypes.func,
+  makeOneTimerOnly: PropTypes.func,
 }.isRequired;
 
 export default Timer;
