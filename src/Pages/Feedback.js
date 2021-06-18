@@ -12,20 +12,19 @@ class Feedback extends Component {
     const stateLS = JSON.parse(localStorage.getItem('state'));
     const { assertions } = stateLS.player;
     const tres = 3;
-    switch (assertions) {
-    case assertions < tres:
-      return 'Podia ser melhor...';
-    default:
-      return 'Mandou bem!';
-    }
+    let message = '';
+    message = (assertions < tres) ? 'Podia ser melhor...' : 'Mandou bem!';
+
+    return message;
   }
 
   render() {
+    const message = this.handleFeedbackMessage();
     return (
       <>
         <Header />
         <div data-testid="feedback-text">
-          Tela de Feedback
+          {message}
         </div>
       </>
     );
