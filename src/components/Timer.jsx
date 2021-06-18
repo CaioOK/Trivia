@@ -29,7 +29,6 @@ class Timer extends React.Component {
     const myTimer = setInterval(() => {
       const { stopTimer, disableBtns, getTime } = this.props;
       if (stopTimer || currentTimeLocal === 0) {
-        console.log('Parou!', currentTimeLocal);
         disableBtns();
         clearInterval(myTimer);
         return;
