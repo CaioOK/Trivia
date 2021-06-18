@@ -35,6 +35,7 @@ class Feedback extends Component {
           <button
             type="button"
             data-testid="btn-play-again"
+            onClick={ () => localStorage.clear() }
           >
             Jogar novamente
           </button>
