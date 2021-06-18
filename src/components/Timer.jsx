@@ -1,12 +1,12 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalTime: 5,
-      currentTime: 5,
+      totalTime: 30,
+      currentTime: 30,
     };
 
     this.counterCreator = this.counterCreator.bind(this);
@@ -62,5 +62,11 @@ class Timer extends React.Component {
     );
   }
 }
+
+Timer.propTypes = {
+  startNewTimer: PropTypes.bool,
+  enableBtns: PropTypes.func,
+  makeOneTimerOnly: PropTypes.func,
+}.isRequired;
 
 export default Timer;

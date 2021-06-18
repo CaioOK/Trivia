@@ -5,11 +5,9 @@ import Timer from './Timer';
 import { addAnswer } from '../actions/index';
 
 const correctAnswerString = 'correct-answer';
-
 class Question extends React.Component {
   constructor() {
     super();
-
     this.handleClick = this.handleClick.bind(this);
     this.stylesMultiple = this.stylesMultiple.bind(this);
     this.stylesTrueFalse = this.stylesTrueFalse.bind(this);
@@ -17,7 +15,6 @@ class Question extends React.Component {
     this.handleDifficulty = this.handleDifficulty.bind(this);
     this.handleGetCurrentTime = this.handleGetCurrentTime.bind(this);
     this.handleDisableAnswersButtons = this.handleDisableAnswersButtons.bind(this);
-
     this.state = {
       colorRed: { border: '3px solid rgb(255, 0, 0)' },
       colorGreen: { border: '3px solid rgb(6, 240, 15)' },
@@ -49,8 +46,7 @@ class Question extends React.Component {
     const meio = 0.5;
     const currentAnswers = answers.sort(() => Math.random() - meio);
     const correctId = currentAnswers.indexOf(correctAnswer);
-    this.setState({
-      currentAnswers,
+    this.setState({ currentAnswers,
       correctId,
       stopTimer: false,
       styleCorrect: {},
@@ -92,11 +88,9 @@ class Question extends React.Component {
 
   trueOfFalse(parametro) {
     const { falseBoolean, trueBoolean } = this.state;
-    let testId1 = `wrong-answer-${0}`;
-    let testId2 = `wrong-answer-${0}`;
-    if (parametro === 'True') {
-      testId1 = correctAnswerString;
-    } else testId2 = correctAnswerString;
+    let testId1 = `wrong-answer-${0}`; let testId2 = `wrong-answer-${0}`;
+    if (parametro === 'True') testId1 = correctAnswerString;
+    else testId2 = correctAnswerString;
     return (
       <>
         <input
@@ -116,8 +110,7 @@ class Question extends React.Component {
           name="question"
           value="False"
           onClick={ (event) => {
-            this.stylesTrueFalse();
-            this.handleClick(undefined, event);
+            this.stylesTrueFalse(); this.handleClick(undefined, event);
           } }
           data-testid={ testId2 }
           style={ falseBoolean }
@@ -127,8 +120,7 @@ class Question extends React.Component {
   }
 
   multiple(answers, correctId) {
-    let wrongID = 0;
-    const { styleCorrect, styleIncorrect } = this.state;
+    let wrongID = 0; const { styleCorrect, styleIncorrect } = this.state;
     return (
       <>
         {answers.map((answer, index) => {
@@ -166,26 +158,20 @@ class Question extends React.Component {
           );
         })}
       </>
-
     );
   }
 
   handleDifficulty(difficulty) {
-    let questionDif = 0;
     switch (difficulty) {
     case 'easy':
-      questionDif = 1;
-      break;
+      return 1;
     case 'medium':
-      questionDif = 2;
-      break;
+      return 2;
     case 'hard':
-      questionDif = 2 + 1;
-      break;
+      return 2 + 1;
     default:
-      return questionDif;
+      return 0;
     }
-    return questionDif;
   }
 
   handleClick(flag, event) {
@@ -197,13 +183,11 @@ class Question extends React.Component {
       if (correctAnswer === event.target.value) {
         assertions(1);
         const score = ten + (currentTime * this.handleDifficulty(difficulty));
-        console.log(score);
         const localStorageState = JSON.parse(localStorage.getItem('state'));
         localStorageState.player.score += score;
         localStorage.setItem('state', JSON.stringify(localStorageState));
       }
     } else {
-      console.log('errou');
       const btns = document.querySelectorAll('input');
       btns.forEach((btn) => { btn.disabled = true; });
     }
