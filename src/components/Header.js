@@ -17,7 +17,7 @@ class Header extends Component {
     const state = { player: {
       name,
       assertions: 0,
-      score: 0,
+      score: 10,
       gravatarEmail: email,
     } };
     if (!localStorage.getItem('state')) {
