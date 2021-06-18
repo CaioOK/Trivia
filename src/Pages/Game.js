@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Question from '../components/Question';
 import { fetchQuestionsAC } from '../actions';
+import { getToken } from '../Services/fetchApi';
 import Header from '../components/Header';
 
 class Game extends Component {
@@ -10,33 +11,65 @@ class Game extends Component {
     super();
 
     this.state = {
-      loading: true,
+      questionIndex: 0,
+      startNewTimer: false,
+      buttonDisabled: true,
+      btnTestId: '',
     };
+
+    this.handleNextQuestion = this.handleNextQuestion.bind(this);
+    this.makeOneTimerOnly = this.makeOneTimerOnly.bind(this);
+    this.handeEnableButton = this.handeEnableButton.bind(this);
   }
 
   componentDidMount() {
     const { getQuestionsFromAPI } = this.props;
-    const time = 1500;
-    setTimeout(() => {
-      getQuestionsFromAPI()
-        .then(() => {
-          this.setState({
-            loading: false,
-          });
-        });
-    }, time);
+    getToken().then(() => getQuestionsFromAPI());
+  }
+
+  handeEnableButton() {
+    this.setState({
+      buttonDisabled: false,
+      btnTestId: 'btn-next',
+    });
+  }
+
+  handleNextQuestion() {
+    this.setState((previousState) => ({
+      questionIndex: previousState.questionIndex + 1,
+      startNewTimer: true,
+      buttonDisabled: true,
+    }));
+  }
+
+  makeOneTimerOnly() {
+    this.setState({
+      startNewTimer: false,
+    });
   }
 
   render() {
     const { questionsFromStore } = this.props;
-    const { loading } = this.state;
+    if (!questionsFromStore) return <div>Carregando...</div>;
+    const { questionIndex, startNewTimer, buttonDisabled, btnTestId } = this.state;
 
     return (
       <div>
         <Header />
-        {loading
-          ? 'Carregando...'
-          : <Question currentQuestion={ questionsFromStore[0] } />}
+        <Question
+          currentQuestion={ questionsFromStore[questionIndex] }
+          startNewTimer={ startNewTimer }
+          makeOneTimerOnly={ this.makeOneTimerOnly }
+          handeEnableButton={ this.handeEnableButton }
+        />
+        <button
+          type="button"
+          onClick={ this.handleNextQuestion }
+          disabled={ buttonDisabled }
+          data-testid={ btnTestId }
+        >
+          Próxima
+        </button>
       </div>
     );
   }

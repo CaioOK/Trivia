@@ -15,8 +15,9 @@ class Question extends React.Component {
     this.stylesTrueFalse = this.stylesTrueFalse.bind(this);
     this.handleQuestions = this.handleQuestions.bind(this);
     this.handleDifficulty = this.handleDifficulty.bind(this);
-    this.saveTimer = this.saveTimer.bind(this);
-    this.stateTimer = 0;
+    this.handleGetCurrentTime = this.handleGetCurrentTime.bind(this);
+    this.handleDisableAnswersButtons = this.handleDisableAnswersButtons.bind(this);
+
     this.state = {
       colorRed: { border: '3px solid rgb(255, 0, 0)' },
       colorGreen: { border: '3px solid rgb(6, 240, 15)' },
@@ -26,16 +27,18 @@ class Question extends React.Component {
       correctId: '',
       trueBoolean: {},
       falseBoolean: {},
+      stopTimer: false,
+      currentTime: 0,
     };
   }
 
   componentDidMount() {
-    const time = 900;
-    setTimeout(() => this.handleQuestions(), time);
+    this.handleQuestions();
   }
 
-  saveTimer(timer) {
-    this.stateTimer = timer;
+  componentDidUpdate() {
+    const { startNewTimer: newQuestion } = this.props;
+    if (newQuestion) this.handleQuestions();
   }
 
   handleQuestions() {
@@ -49,28 +52,40 @@ class Question extends React.Component {
     this.setState({
       currentAnswers,
       correctId,
+      stopTimer: false,
+      styleCorrect: {},
+      styleIncorrect: {},
+      trueBoolean: {},
+      falseBoolean: {},
     });
   }
 
   stylesMultiple() {
+    const { handeEnableButton } = this.props;
+    handeEnableButton();
     this.setState((previousState) => ({
       styleCorrect: previousState.colorGreen,
       styleIncorrect: previousState.colorRed,
+      stopTimer: true,
     }));
   }
 
   stylesTrueFalse() {
+    const { handeEnableButton } = this.props;
+    handeEnableButton();
     const answerArray = document.querySelectorAll('input');
     const getAnswer = answerArray[0].getAttribute('data-testid');
     if (getAnswer === correctAnswerString) {
       this.setState((previousState) => ({
         trueBoolean: previousState.colorGreen,
         falseBoolean: previousState.colorRed,
+        stopTimer: true,
       }));
     } else {
       this.setState((previousState) => ({
         falseBoolean: previousState.colorRed,
         trueBoolean: previousState.colorGreen,
+        stopTimer: true,
       }));
     }
   }
@@ -175,12 +190,13 @@ class Question extends React.Component {
 
   handleClick(flag, event) {
     const ten = 10;
+    const { currentTime } = this.state;
     const { assertions, currentQuestion: { correct_answer: correctAnswer, difficulty },
     } = this.props;
     if (flag === undefined) {
       if (correctAnswer === event.target.value) {
         assertions(1);
-        const score = ten + (this.stateTimer * this.handleDifficulty(difficulty));
+        const score = ten + (currentTime * this.handleDifficulty(difficulty));
         console.log(score);
         const localStorageState = JSON.parse(localStorage.getItem('state'));
         localStorageState.player.score += score;
@@ -193,21 +209,47 @@ class Question extends React.Component {
     }
   }
 
+  handleDisableAnswersButtons() {
+    const answersBtns = document.querySelectorAll('input');
+    answersBtns.forEach((btn) => { btn.disabled = true; });
+    const { handeEnableButton } = this.props;
+    handeEnableButton();
+  }
+
+  handleEnableAnswersButtons() {
+    const answersBtns = document.querySelectorAll('input');
+    answersBtns.forEach((btn) => { btn.disabled = false; });
+  }
+
+  handleGetCurrentTime(time) {
+    this.setState({
+      currentTime: time,
+    });
+  }
+
   render() {
-    const { currentQuestion } = this.props;
+    const { currentQuestion, makeOneTimerOnly, startNewTimer } = this.props;
     if (!currentQuestion) return <div>Carregando...</div>;
     const { category, question, type } = currentQuestion;
-    const { currentAnswers, correctId } = this.state;
+    const { currentAnswers, correctId, stopTimer } = this.state;
 
     return (
       <section style={ { display: 'flex', flexDirection: 'column' } }>
+        <Timer
+          answerQuestion={ this.handleClick }
+          stopTimer={ stopTimer }
+          startNewTimer={ startNewTimer }
+          makeOneTimerOnly={ makeOneTimerOnly }
+          disableBtns={ this.handleDisableAnswersButtons }
+          enableBtns={ this.handleEnableAnswersButtons }
+          getTime={ this.handleGetCurrentTime }
+        />
         <h3 data-testid="question-category">{category}</h3>
         <p data-testid="question-text">{question}</p>
         <div style={ { display: 'flex', flexDirection: 'column' } }>
           {type === 'boolean'
             ? this.trueOfFalse('True') : this.multiple(currentAnswers, correctId)}
         </div>
-        <Timer answerQuestion={ this.handleClick } saveTimer={ this.saveTimer } />
       </section>
     );
   }

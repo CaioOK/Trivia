@@ -1,34 +1,66 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+// import PropTypes from 'prop-types';
 
-const Timer = ({ answerQuestion, saveTimer }) => {
-  const timerNumber = 30;
-  const timeoutCountdown = 1000;
+class Timer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      totalTime: 5,
+      currentTime: 5,
+    };
 
-  const [timer, setTimer] = useState(timerNumber);
+    this.counterCreator = this.counterCreator.bind(this);
+    this.handleNewTimer = this.handleNewTimer.bind(this);
+  }
 
-  const timer1 = () => setTimeout(() => setTimer(timer - 1), timeoutCountdown);
-  const timerId = timer1();
+  componentDidMount() {
+    this.counterCreator();
+  }
 
-  const timerZerado = () => {
-    clearTimeout(timerId);
-    answerQuestion(true);
-  };
+  componentDidUpdate() {
+    this.handleNewTimer();
+  }
 
-  // console.log(saveTimer);
-  saveTimer(timer);
+  counterCreator() {
+    const { totalTime } = this.state;
+    const oneSecond = 1000;
+    let currentTimeLocal = totalTime;
 
-  return (
-    <div>
-      <p>
-        {timer > 0 ? `${timer} segundos` : timerZerado() }
-      </p>
-    </div>
-  );
-};
+    const myTimer = setInterval(() => {
+      const { stopTimer, disableBtns, getTime } = this.props;
+      if (stopTimer || currentTimeLocal === 0) {
+        console.log('Parou!', currentTimeLocal);
+        disableBtns();
+        clearInterval(myTimer);
+        return;
+      }
+      currentTimeLocal -= 1;
+      this.setState({ currentTime: currentTimeLocal });
+      getTime(currentTimeLocal);
+    }, oneSecond);
+  }
 
-Timer.propTypes = {
-  answerQuestion: PropTypes.func,
-}.isRequired;
+  handleNewTimer() {
+    const { makeOneTimerOnly, startNewTimer, enableBtns } = this.props;
+
+    if (startNewTimer) {
+      this.counterCreator();
+      makeOneTimerOnly();
+      enableBtns();
+    }
+  }
+
+  render() {
+    const { currentTime } = this.state;
+
+    return (
+      <div>
+        <p>
+          { currentTime }
+        </p>
+      </div>
+    );
+  }
+}
 
 export default Timer;
