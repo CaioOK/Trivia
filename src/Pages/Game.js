@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import Question from '../components/Question';
 import { fetchQuestionsAC } from '../actions';
 import { getToken } from '../Services/fetchApi';
@@ -52,25 +53,29 @@ class Game extends Component {
     const { questionsFromStore } = this.props;
     if (!questionsFromStore) return <div>Carregando...</div>;
     const { questionIndex, startNewTimer, buttonDisabled, btnTestId } = this.state;
+    const maxQuestions = 5;
 
     return (
-      <div>
-        <Header />
-        <Question
-          currentQuestion={ questionsFromStore[questionIndex] }
-          startNewTimer={ startNewTimer }
-          makeOneTimerOnly={ this.makeOneTimerOnly }
-          handeEnableButton={ this.handeEnableButton }
-        />
-        <button
-          type="button"
-          onClick={ this.handleNextQuestion }
-          disabled={ buttonDisabled }
-          data-testid={ btnTestId }
-        >
-          Próxima
-        </button>
-      </div>
+      (questionIndex === maxQuestions) ? <Redirect to="/feedback" />
+        : (
+          <div>
+            <Header />
+            <Question
+              currentQuestion={ questionsFromStore[questionIndex] }
+              startNewTimer={ startNewTimer }
+              makeOneTimerOnly={ this.makeOneTimerOnly }
+              handeEnableButton={ this.handeEnableButton }
+            />
+            <button
+              type="button"
+              onClick={ this.handleNextQuestion }
+              disabled={ buttonDisabled }
+              data-testid={ btnTestId }
+            >
+              Próxima
+            </button>
+          </div>
+        )
     );
   }
 }

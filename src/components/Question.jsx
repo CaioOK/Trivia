@@ -1,8 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Timer from './Timer';
-import { addAnswer } from '../actions/index';
 
 const correctAnswerString = 'correct-answer';
 class Question extends React.Component {
@@ -177,14 +175,14 @@ class Question extends React.Component {
   handleClick(flag, event) {
     const ten = 10;
     const { currentTime } = this.state;
-    const { assertions, currentQuestion: { correct_answer: correctAnswer, difficulty },
+    const { currentQuestion: { correct_answer: correctAnswer, difficulty },
     } = this.props;
     if (flag === undefined) {
       if (correctAnswer === event.target.value) {
-        assertions(1);
         const score = ten + (currentTime * this.handleDifficulty(difficulty));
         const localStorageState = JSON.parse(localStorage.getItem('state'));
         localStorageState.player.score += score;
+        localStorageState.player.assertions += 1;
         localStorage.setItem('state', JSON.stringify(localStorageState));
       }
     } else {
@@ -243,7 +241,4 @@ Question.propTypes = {
   currentQuestion: PropTypes.objectOf(PropTypes.string, PropTypes.array),
 }.isRequired;
 
-const mapDispatchToProps = (dispatch) => ({
-  assertions: (answer) => dispatch(addAnswer(answer)),
-});
-export default connect(null, mapDispatchToProps)(Question);
+export default Question;
