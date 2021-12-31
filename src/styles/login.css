@@ -1,9 +1,11 @@
 #login-container {
-  margin-top: 60vh;
   display: flex;
   flex-flow: column nowrap;
-  /* background-color: red; */
+  background-color: #FFD25A;
   align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 #form-contaner {

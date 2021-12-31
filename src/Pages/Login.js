@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { addInfo } from '../actions';
 import { getToken } from '../Services/fetchApi';
 import '../styles/login.css';
+import logo from '../trivia.png';
 
 class Login extends React.Component {
   constructor(_props) {
@@ -54,6 +55,7 @@ class Login extends React.Component {
 
     return (
       <div id="login-container">
+        <img src={ logo } className="App-logo" alt="logo" />
         <div id="form-contaner">
           <label htmlFor="name">
             Nome:
