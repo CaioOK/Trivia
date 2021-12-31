@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as api from '../Services/fetchApi';
+import '../styles/header.css';
 
 class Header extends Component {
   constructor(props) {
@@ -20,26 +21,34 @@ class Header extends Component {
       score: 10,
       gravatarEmail: email,
     } };
+
     if (!localStorage.getItem('state')) {
       localStorage.setItem('state', JSON.stringify(state));
     }
+
     api.fetchGravatar(email).then((imgUrl) => this.setState({ imgUrl }));
   }
 
   render() {
     const stateLS = JSON.parse(localStorage.getItem('state'));
+
     if (!stateLS) return <div>Carregando...</div>;
+
     const { imgUrl } = this.state;
     const { name } = this.props;
     const { score } = stateLS.player;
+
     return (
-      <div>
-        <header>
+      <header id="header-container">
+        <div id="score-container">
+          <h4>Score:</h4>
+          <p data-testid="header-score" id="score">{score}</p>
+        </div>
+        <div id="profile">
           <img src={ imgUrl } alt="foto-perfil" data-testid="header-profile-picture" />
           <span data-testid="header-player-name">{ name }</span>
-        </header>
-        <p data-testid="header-score">{score}</p>
-      </div>
+        </div>
+      </header>
     );
   }
 }

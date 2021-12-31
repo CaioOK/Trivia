@@ -1,0 +1,39 @@
+#header-container {
+  background-color: teal;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  height: 20vh;
+}
+
+#score-container {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 15vw;
+  height: 50px;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  margin-left: 2vw;
+}
+
+#score-container > p {
+  margin-left: 2vw;
+  font-size: 30px;
+}
+
+#profile {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-right: 2vw;
+  color: white;
+  font-size: 20px;
+}
+
+[data-testid="header-profile-picture"] {
+  border-radius: 100%;
+  width: fit-content;
+  height: fit-content;
+}
