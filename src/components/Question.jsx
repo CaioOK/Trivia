@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Timer from './Timer';
+import '../styles/question.css';
 
 const correctAnswerString = 'correct-answer';
 class Question extends React.Component {
@@ -14,8 +15,8 @@ class Question extends React.Component {
     this.handleGetCurrentTime = this.handleGetCurrentTime.bind(this);
     this.handleDisableAnswersButtons = this.handleDisableAnswersButtons.bind(this);
     this.state = {
-      colorRed: { border: '3px solid rgb(255, 0, 0)' },
-      colorGreen: { border: '3px solid rgb(6, 240, 15)' },
+      colorRed: { border: '3px solid rgb(255, 0, 0)', 'border-radius': '10px' },
+      colorGreen: { border: '3px solid rgb(6, 240, 15)', 'border-radius': '10px' },
       styleCorrect: {},
       styleIncorrect: {},
       currentAnswers: [],
@@ -216,7 +217,9 @@ class Question extends React.Component {
     const { currentAnswers, correctId, stopTimer } = this.state;
 
     return (
-      <section style={ { display: 'flex', flexDirection: 'column' } }>
+      <section id="question-container">
+        <h3 data-testid="question-category">{category}</h3>
+        <p data-testid="question-text">{question}</p>
         <Timer
           answerQuestion={ this.handleClick }
           stopTimer={ stopTimer }
@@ -226,8 +229,6 @@ class Question extends React.Component {
           enableBtns={ this.handleEnableAnswersButtons }
           getTime={ this.handleGetCurrentTime }
         />
-        <h3 data-testid="question-category">{category}</h3>
-        <p data-testid="question-text">{question}</p>
         <div style={ { display: 'flex', flexDirection: 'column' } }>
           {type === 'boolean'
             ? this.trueOfFalse('True') : this.multiple(currentAnswers, correctId)}

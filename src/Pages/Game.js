@@ -6,6 +6,7 @@ import Question from '../components/Question';
 import { fetchQuestionsAC } from '../actions';
 import { getToken } from '../Services/fetchApi';
 import Header from '../components/Header';
+import '../styles/game.css';
 
 class Game extends Component {
   constructor() {
@@ -58,7 +59,7 @@ class Game extends Component {
     return (
       (questionIndex === maxQuestions) ? <Redirect to="/feedback" />
         : (
-          <div>
+          <div id="game-container">
             <Header />
             <Question
               currentQuestion={ questionsFromStore[questionIndex] }
@@ -67,6 +68,7 @@ class Game extends Component {
               handeEnableButton={ this.handeEnableButton }
             />
             <button
+              id="next-btn"
               type="button"
               onClick={ this.handleNextQuestion }
               disabled={ buttonDisabled }
