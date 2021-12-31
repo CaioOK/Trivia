@@ -4,6 +4,7 @@ import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { addInfo } from '../actions';
 import { getToken } from '../Services/fetchApi';
+import '../styles/login.css';
 
 class Login extends React.Component {
   constructor(_props) {
@@ -50,48 +51,44 @@ class Login extends React.Component {
   render() {
     const { name, gravatarEmail, loggedIn } = this.state;
     const isDisabled = !this.validateFields(name, gravatarEmail);
+
     return (
-
-      <div>
-        <Link to="/settings">
-          <button
-            type="button"
-            data-testid="btn-settings"
-          >
-
-            Menu
-          </button>
-        </Link>
-        <label htmlFor="name">
-          Nome:
-          <input
-            id="name"
-            data-testid="input-player-name"
-            type="text"
-            value={ name }
-            onChange={ this.handleChange }
-          />
-        </label>
-        <label htmlFor="gravatarEmail">
-          Email:
-          <input
-            id="gravatarEmail"
-            value={ gravatarEmail }
-            data-testid="input-gravatar-email"
-            type="email"
-            onChange={ this.handleChange }
-          />
-        </label>
-        {loggedIn ? <Redirect to="/info-games" /> : (
-          <button
-            type="submit"
-            data-testid="btn-play"
-            onClick={ this.handleClick }
-            disabled={ isDisabled }
-          >
-            Jogar
-          </button>
-        )}
+      <div id="login-container">
+        <div id="form-contaner">
+          <label htmlFor="name">
+            Nome:
+            <input
+              id="name"
+              data-testid="input-player-name"
+              type="text"
+              value={ name }
+              onChange={ this.handleChange }
+            />
+          </label>
+          <label htmlFor="gravatarEmail" id="email-label">
+            Email:
+            <input
+              id="gravatarEmail"
+              value={ gravatarEmail }
+              data-testid="input-gravatar-email"
+              type="email"
+              onChange={ this.handleChange }
+            />
+          </label>
+          {loggedIn ? <Redirect to="/info-games" /> : (
+            <button
+              type="submit"
+              data-testid="btn-play"
+              onClick={ this.handleClick }
+              disabled={ isDisabled }
+            >
+              Jogar
+            </button>
+          )}
+          <Link to="/settings">
+            <button type="button" data-testid="btn-settings">Menu</button>
+          </Link>
+        </div>
       </div>
     );
   }
