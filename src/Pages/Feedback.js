@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import '../styles/feedback.css';
 
 class Feedback extends Component {
   constructor() {
@@ -24,28 +25,28 @@ class Feedback extends Component {
     const stateLS = JSON.parse(localStorage.getItem('state'));
     const { assertions, score } = stateLS.player;
     return (
-      <>
+      <div id="feedback">
         <Header />
-        <h3 data-testid="feedback-total-score">{score}</h3>
-        <h3 data-testid="feedback-total-question">{assertions}</h3>
-        <div data-testid="feedback-text">
-          {message}
+        <div id="feedback-container">
+          <h3 data-testid="feedback-total-score">{`Score: ${score}`}</h3>
+          <h3 data-testid="feedback-total-question">{`Acertos: ${assertions}`}</h3>
+          <span data-testid="feedback-text">{`Feedback: ${message}`}</span>
+          <Link to="/">
+            <button
+              type="button"
+              data-testid="btn-play-again"
+              onClick={ () => localStorage.clear() }
+            >
+              Jogar novamente
+            </button>
+          </Link>
+          <Link to="/ranking">
+            <button type="button" data-testid="btn-ranking">
+              Ver Ranking
+            </button>
+          </Link>
         </div>
-        <Link to="/">
-          <button
-            type="button"
-            data-testid="btn-play-again"
-            onClick={ () => localStorage.clear() }
-          >
-            Jogar novamente
-          </button>
-        </Link>
-        <Link to="/ranking">
-          <button type="button" data-testid="btn-ranking">
-            Ver Ranking
-          </button>
-        </Link>
-      </>
+      </div>
     );
   }
 }

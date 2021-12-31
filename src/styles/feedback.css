@@ -1,0 +1,29 @@
+#feedback {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  background-color: rgb(190, 190, 190);
+  height: 100vh;
+}
+
+#feedback-container {
+  display: flex;
+  flex-flow: column nowrap;
+  margin-top: 20vh;
+  align-items: center;
+  justify-content: center;
+}
+
+#feedback-container > div {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+#feedback-container button {
+  margin-bottom: 2vh;
+}
+
+[data-testid="feedback-text"] {
+  margin-bottom: 2vh;
+}

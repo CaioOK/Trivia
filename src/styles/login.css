@@ -1,0 +1,43 @@
+#login-container {
+  display: flex;
+  flex-flow: column nowrap;
+  background-color: #FFD25A;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+#form-contaner {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center ;
+  align-items: center;
+  width: fit-content;
+  /* background-color: blue; */
+  margin-right: 5vw;
+}
+
+#name {
+  margin-left: 5px;
+}
+
+#email-label {
+  margin-top: 2vh;
+}
+
+#gravatarEmail {
+  margin-left: 9px;
+}
+
+[data-testid="btn-play"]{
+  width: 8vw;
+  align-items: center;
+  margin-left: 4vw;
+  margin-top: 2vh;
+}
+
+[data-testid="btn-settings"] {
+  margin-left: 4vw;
+  margin-top: 1vh;
+}

@@ -1,0 +1,12 @@
+#question-container {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  margin-top: 10vh;
+}
+
+#question-container input {
+  max-width: 40vw;
+  margin-bottom: 2vh;
+  height: 4vh;
+}
