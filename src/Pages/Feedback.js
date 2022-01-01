@@ -28,9 +28,17 @@ class Feedback extends Component {
       <div id="feedback">
         <Header />
         <div id="feedback-container">
-          <h3 data-testid="feedback-total-score">{`Score: ${score}`}</h3>
-          <h3 data-testid="feedback-total-question">{`Acertos: ${assertions}`}</h3>
-          <span data-testid="feedback-text">{`Feedback: ${message}`}</span>
+          <h3
+            data-testid="feedback-total-question"
+          >
+            {`Você acertou ${assertions} perguntas!`}
+          </h3>
+          <h3
+            data-testid="feedback-total-score"
+          >
+            {`E obteve o total de ${score} pontos`}
+          </h3>
+          <span data-testid="feedback-text">{`Conclusão: ${message}`}</span>
           <Link to="/">
             <button
               type="button"
